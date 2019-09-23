@@ -41,8 +41,8 @@
     <Reference Include="BeatSaberCustomUI">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Plugins\BeatSaberCustomUI.dll</HintPath>
     </Reference>
-    <Reference Include="BeatSaverDownloader">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Plugins\BeatSaverDownloader.dll</HintPath>
+    <Reference Include="BSIPA-ModList">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Plugins\BSIPA-ModList.dll</HintPath>
     </Reference>
     <Reference Include="BSML">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Plugins\BSML.dll</HintPath>
@@ -96,6 +96,10 @@
     <Reference Include="UnityEngine.UnityWebRequestModule">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestTextureModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UnityWebRequestWWWModule">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
     </Reference>
@@ -104,12 +108,35 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assistant.cs" />
+    <Compile Include="BMPFlowCoordinator.cs" />
+    <Compile Include="Models\AdvancedPost.cs" />
+    <Compile Include="Models\Channel.cs" />
+    <Compile Include="Patches\MainFlowCoordinatorDidActivate.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\Downloader.cs" />
+    <Compile Include="Utilities\HarmonyUtil.cs" />
+    <Compile Include="Utilities\SimpleJSON.cs" />
+    <Compile Include="ViewControllers\PostDetailViewController.cs" />
+    <Compile Include="ViewControllers\ChannelsViewController.cs" />
+    <Compile Include="ViewControllers\PostListViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\postdetail.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\postlist.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\channels.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="omegacomfy.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

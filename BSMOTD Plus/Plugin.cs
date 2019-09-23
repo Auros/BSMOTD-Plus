@@ -1,6 +1,5 @@
-﻿using IPA;
-using IPA.Config;
-using IPA.Utilities;
+﻿using BSMOTD_Plus.Utilities;
+using IPA;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
 
@@ -17,6 +16,7 @@ namespace BSMOTD_Plus
         public void OnApplicationStart()
         {
             Logger.log.Debug("OnApplicationStart");
+            HarmonyUtil.PatchGame();
         }
 
         public void OnApplicationQuit()
@@ -31,7 +31,7 @@ namespace BSMOTD_Plus
 
         public void OnUpdate()
         {
-
+            
         }
 
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
@@ -41,7 +41,10 @@ namespace BSMOTD_Plus
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
         {
-
+            if (scene.name == "MenuCore")
+            {
+                CustomUI.MenuButton.MenuButtonUI.AddButton("BSMOTD", Assistant.Instance.SummonUI);
+            }
         }
 
         public void OnSceneUnloaded(Scene scene)
