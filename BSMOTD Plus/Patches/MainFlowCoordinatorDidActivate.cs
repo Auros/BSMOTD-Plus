@@ -10,10 +10,21 @@ namespace BSMOTD_Plus.Patches
     {
         public static bool firstTimeHappened = false;
 
+        static bool isOnStartup;
         static void Postfix()
         {
-            if (!firstTimeHappened)
+            isOnStartup = Plugin.config.GetBoolean("behavior", "onstartup") ?? true;
+            if (!firstTimeHappened && isOnStartup)
+            {
+                
                 SharedCoroutineStarter.instance.StartCoroutine(Wait());
+            }
+            
+
+            if (isOnStartup == false)
+            {
+                firstTimeHappened = true;
+            }
             //return true;
         }
 

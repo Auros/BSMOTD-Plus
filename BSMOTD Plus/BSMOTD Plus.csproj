@@ -53,6 +53,9 @@
     <Reference Include="IPA.Loader">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\IPA.Loader.dll</HintPath>
     </Reference>
+    <Reference Include="LibConf.1.0.0.0">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Libs\LibConf.1.0.0.0.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json.12.0.0.0">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Libs\Newtonsoft.Json.12.0.0.0.dll</HintPath>
     </Reference>
@@ -119,6 +122,7 @@
     <Compile Include="Utilities\Downloader.cs" />
     <Compile Include="Utilities\HarmonyUtil.cs" />
     <Compile Include="Utilities\SimpleJSON.cs" />
+    <Compile Include="ViewControllers\SettingsViewController.cs" />
     <Compile Include="ViewControllers\PostDetailViewController.cs" />
     <Compile Include="ViewControllers\ChannelsViewController.cs" />
     <Compile Include="ViewControllers\PostListViewController.cs" />
@@ -137,6 +141,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="omegacomfy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\settings.bsml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

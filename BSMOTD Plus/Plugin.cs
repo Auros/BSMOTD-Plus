@@ -2,11 +2,15 @@
 using IPA;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
+using LibConf;
+using LibConf.Providers;
+using IPA.Utilities;
 
 namespace BSMOTD_Plus
 {
     public class Plugin : IBeatSaberPlugin
     {
+        public static IConfigProvider config;
 
         public void Init(IPALogger logger)
         {
@@ -15,13 +19,14 @@ namespace BSMOTD_Plus
 
         public void OnApplicationStart()
         {
-            Logger.log.Debug("OnApplicationStart");
             HarmonyUtil.PatchGame();
+
+            config = Conf.CreateConfig(ConfigType.YAML, BeatSaber.UserDataPath, "BSMOTDPlus");
         }
 
         public void OnApplicationQuit()
         {
-            Logger.log.Debug("OnApplicationQuit");
+
         }
 
         public void OnFixedUpdate()

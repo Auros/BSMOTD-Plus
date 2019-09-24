@@ -43,6 +43,12 @@ namespace BSMOTD_Plus.ViewControllers
         }
         List<AdvancedPost> cellInfo = new List<AdvancedPost>();
 
+        public void Clear()
+        {
+            newsListTableData.data.Clear();
+            newsListTableData.tableView.ReloadData();
+        }
+
         public void SetData(List<AdvancedPost> posts)
         {
             newsListTableData.data.Clear();

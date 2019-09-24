@@ -20,22 +20,26 @@ namespace BSMOTD_Plus
         protected PostListViewController _postList;
         protected PostDetailViewController _postDetail;
         protected ChannelsViewController _channels;
+        protected SettingsViewController _settings;
         protected DismissableNavigationController _navCon;
 
         public static List<Channel> channels = new List<Channel>();
         public static List<AdvancedPost> posts = new List<AdvancedPost>();
         public static Channel activeChannel;
 
-
+        
         protected override void DidActivate(bool firstActivation, ActivationType activationType)
         {
             if (firstActivation)
             {
+                //firstLoad = Plugin.config.GetBoolean("behavior", "onstartup") ?? true;
+
                 title = "BSMOTD Plus";
 
                 _postList = BeatSaberUI.CreateViewController<PostListViewController>();
                 _postDetail = BeatSaberUI.CreateViewController<PostDetailViewController>();
                 _channels = BeatSaberUI.CreateViewController<ChannelsViewController>();
+                _settings = BeatSaberUI.CreateViewController<SettingsViewController>();
 
                 _navCon = BeatSaberUI.CreateDismissableNavigationController();
 
@@ -49,8 +53,8 @@ namespace BSMOTD_Plus
             if (activationType == ActivationType.AddedToHierarchy)
             {
                 SetViewControllersToNavigationConctroller(_navCon, _postList);
-                ProvideInitialViewControllers(_navCon, _channels);
-                SharedCoroutineStarter.instance.StartCoroutine(WaitC());
+                ProvideInitialViewControllers(_navCon, _channels, _settings);
+                
                 firstClick = true;
 
                 channels.Clear();
@@ -60,6 +64,8 @@ namespace BSMOTD_Plus
 
         private void ClickedChannel(Channel obj)
         {
+            _postList.Clear();
+            posts.Clear();
             SharedCoroutineStarter.instance.StartCoroutine(GetNewsPost(obj.Source));
         }
 
@@ -80,10 +86,13 @@ namespace BSMOTD_Plus
 
         }
 
+        bool firstLoad = true;
+
         private IEnumerator WaitC()
         {
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(.25f);
             _channels.SetData(channels);
+            yield return new WaitForSeconds(1f);
             _channels.newsListTableData.tableView.SelectCellWithIdx(0);
         }
 
@@ -144,6 +153,8 @@ namespace BSMOTD_Plus
                 
             else
             {
+                channels.Clear();
+
                 JSONArray channelNames = JSON.Parse(getChannels.downloadHandler.text).AsArray;
 
                 foreach (JSONObject channel in channelNames)
@@ -161,10 +172,12 @@ namespace BSMOTD_Plus
                 }
 
 
-                if (posts.Count == 0)
+                if (firstLoad)
                 {
+                    firstLoad = false;
                     activeChannel = channels.First();
                     SharedCoroutineStarter.instance.StartCoroutine(GetNewsPost(activeChannel.Source));
+                    SharedCoroutineStarter.instance.StartCoroutine(WaitC());
                 }
                     
             }
