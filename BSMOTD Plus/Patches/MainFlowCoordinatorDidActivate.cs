@@ -15,17 +15,10 @@ namespace BSMOTD_Plus.Patches
         {
             isOnStartup = Plugin.config.GetBoolean("behavior", "onstartup") ?? true;
             if (!firstTimeHappened && isOnStartup)
-            {
-                
                 SharedCoroutineStarter.instance.StartCoroutine(Wait());
-            }
-            
 
             if (isOnStartup == false)
-            {
                 firstTimeHappened = true;
-            }
-            //return true;
         }
 
         static IEnumerator Wait()

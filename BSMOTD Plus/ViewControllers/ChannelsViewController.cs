@@ -34,7 +34,6 @@ namespace BSMOTD_Plus.ViewControllers
         {
             //Logger.log.Info(row.ToString());
             newChannelClicked?.Invoke(cellInfo[row]);
-            
         }
         List<Channel> cellInfo = new List<Channel>();
 
