@@ -13,9 +13,14 @@ using UnityEngine.Networking;
 
 namespace BSMOTD
 {
+    public enum VersionCodes
+    {
+        Ambrosia
+    }
+
     public class BSMOTDManager : PersistentSingleton<BSMOTDManager>
     {
-        internal bool ShowMenuQueue = false;
+        internal VersionCodes currentCode = VersionCodes.Ambrosia;
         internal BSMOTDFlowCoordinator flowC;
 
         private MainFlowCoordinator _mainFlowCoordinator;
@@ -50,7 +55,8 @@ namespace BSMOTD
                 JSONArray channelNames = JSON.Parse(getChannels.downloadHandler.text).AsArray;
                 foreach (JSONObject channel in channelNames)
                 {
-                    channels.Add(new Channel(channel["name"], channel["description"], channel["image"], channel["color"]["r"].AsFloat, channel["color"]["g"].AsFloat, channel["color"]["b"].AsFloat, channel["code"]));
+                    if (Enum.TryParse(channel["ver"], out VersionCodes code) && code >= currentCode)
+                        channels.Add(new Channel(channel["name"], channel["description"], channel["image"], channel["color"]["r"].AsFloat, channel["color"]["g"].AsFloat, channel["color"]["b"].AsFloat, channel["code"]));
 
                 }
             }
