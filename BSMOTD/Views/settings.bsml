@@ -1,0 +1,8 @@
+﻿<vertical>
+  <horizontal horizontal-fit='PreferredSize'>
+    <checkbox-setting text='Launch On Startup' apply-on-change='true' value='launch' hover-hint='If this is enabled, this menu will pop up when you launch your game.'></checkbox-setting>
+  </horizontal>
+  <horizontal horizontal-fit='PreferredSize'>
+    <checkbox-setting text='Load Images' apply-on-change='true' value='images' hover-hint='Disabling this will cause no news images to load.'></checkbox-setting>
+  </horizontal>
+</vertical>

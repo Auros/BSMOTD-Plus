@@ -8,6 +8,6 @@
   </horizontal>
   <horizontal>
     <button on-click='cancel' text='Go Back'></button>
-    <button text='Add To Stream'></button>
+    <button id='stream' on-click='addrem' text='Add To Stream'></button>
   </horizontal>
 </vertical>

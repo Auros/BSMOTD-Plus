@@ -11,7 +11,7 @@ namespace BSMOTD
         public bool RegenerateConfig = true;
         public string SelectedChannel = "";
         public DateTime LastPostReceived;
-        public string[] ActiveChannels;
+        public List<string> ActiveChannels;
         public bool LoadPostImages = true;
         public LaunchType Launch = LaunchType.Always;
     }
@@ -19,7 +19,7 @@ namespace BSMOTD
     public enum LaunchType
     {
         Always,
-        NewPostsOnly,
-        Never
+        Never,
+        NewPostsOnly
     }
 }

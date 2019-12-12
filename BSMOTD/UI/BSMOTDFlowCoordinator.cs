@@ -14,30 +14,53 @@ namespace BSMOTD.UI
 {
     public class BSMOTDFlowCoordinator : FlowCoordinator
     {
+        protected NavigationController navigationController;
+
         protected ChannelPostViewController _channelPostVC;
         protected ChannelListViewController _channelListVC;
         protected ChannelInfoViewController _channelInfoVC;
+        protected PostDetailViewController _postDetailVC;
+        protected SettingsViewController _settingsVC;
         protected override void DidActivate(bool firstActivation, ActivationType activationType)
         {
             title = "BSMOTD";
 
             if (firstActivation && activationType == ActivationType.AddedToHierarchy)
             {
+                navigationController = BeatSaberUI.CreateViewController<NavigationController>();
+
                 _channelPostVC = BeatSaberUI.CreateViewController<ChannelPostViewController>();
                 _channelListVC = BeatSaberUI.CreateViewController<ChannelListViewController>();
                 _channelInfoVC = BeatSaberUI.CreateViewController<ChannelInfoViewController>();
+                _postDetailVC = BeatSaberUI.CreateViewController<PostDetailViewController>();
+                _settingsVC = BeatSaberUI.CreateViewController<SettingsViewController>();
                 _channelListVC.channelClicked += ChannelList_channelClicked;
-                
+                _channelPostVC.postClicked += ChannelPost_postClicked;
 
-                ProvideInitialViewControllers(_channelPostVC, _channelListVC);
+                SetViewControllerToNavigationConctroller(navigationController, _channelPostVC);
+                ProvideInitialViewControllers(navigationController, _channelListVC, _settingsVC);
                 showBackButton = true;
+
             }
             StartCoroutine(HotReloadCoroutine());
         }
 
+        private void ChannelPost_postClicked(Post post)
+        {
+            if (!_postDetailVC.isInViewControllerHierarchy)
+            {
+                PushViewControllerToNavigationController(navigationController, _postDetailVC);
+            }
+            _postDetailVC.SetDetails(post);
+            SiaUtil.widePeepoHappy.MenuColorChanger.instance.SetColorOvertime(post.channel.theme, .25f);
+        }
+
         public void Dismiss(ViewController vc)
         {
+            _channelListVC.customListTableData.tableView.ClearSelection();
             DismissViewController(vc);
+            if (_postDetailVC.isInViewControllerHierarchy)
+                PopViewControllerFromNavigationController(navigationController);
         }
 
         private void ChannelList_channelClicked(Channel chn)
@@ -68,6 +91,8 @@ namespace BSMOTD.UI
                         HotReloadableViewController.RefreshViewController(_channelListVC);
                     if (_channelInfoVC.ContentChanged)
                         HotReloadableViewController.RefreshViewController(_channelInfoVC);
+                    if (_postDetailVC.ContentChanged)
+                        HotReloadableViewController.RefreshViewController(_postDetailVC);
                     yield return waitTime;
                 }
             }
@@ -80,10 +105,13 @@ namespace BSMOTD.UI
                 _channelListVC.MarkDirty();
             if (e.FullPath == _channelInfoVC.ResourceFilePath)
                 _channelInfoVC.MarkDirty();
+            if (e.FullPath == _postDetailVC.ResourceFilePath)
+                _postDetailVC.MarkDirty();
         }
 
         protected override void BackButtonWasPressed(ViewController topViewController)
         {
+            SiaUtil.widePeepoHappy.MenuColorChanger.instance.RevertColors();
             if (_channelInfoVC.isInViewControllerHierarchy)
                 DismissViewController(_channelInfoVC);
             _channelListVC.customListTableData.tableView.ClearSelection();

@@ -18,26 +18,65 @@ namespace BSMOTD.UI
 
         public override string ResourceFilePath => BeatSaber.InstallPath + "\\BSMOTDHR\\channel-info.bsml";
 
+        public Channel currentChannel;
+
         [UIComponent("image")]
         private RawImage image;
-
         [UIComponent("name")]
         private TextMeshProUGUI name;
         [UIComponent("desc")]
         private TextMeshProUGUI desc;
+        [UIComponent("stream")]
+        private Button stream;
 
         [UIAction("cancel")]
         private void Clicked()
         {
-            Logger.log.Info("EWRWE");
+            //When you're lazy
             Resources.FindObjectsOfTypeAll<BSMOTDFlowCoordinator>()?.First().Dismiss(this);
+        }
+
+        [UIAction("addrem")]
+        private void ButtonClick()
+        {
+            StreamMod();
+        }
+
+        private void StreamMod()
+        {
+            if (currentChannel.active == true)
+            {
+                BSMOTDManager.instance.RemovePosts(currentChannel);
+                currentChannel.active = false;
+                stream.GetComponentInChildren<TextMeshProUGUI>().text = "Add To Stream";
+                
+                Plugin.config.Value.ActiveChannels?.Remove(currentChannel.name);
+            } 
+            else
+            {
+                StartCoroutine(BSMOTDManager.instance.AddPosts(currentChannel));
+                currentChannel.active = true;
+                stream.GetComponentInChildren<TextMeshProUGUI>().text = "Remove From Stream";
+                if (Plugin.config.Value.ActiveChannels == null)
+                    Plugin.config.Value.ActiveChannels = new List<string>();
+                Plugin.config.Value.ActiveChannels?.Remove(currentChannel.name);
+                Plugin.config.Value.ActiveChannels.Add(currentChannel.name);
+                
+            }
+            Plugin.configProvider.Store(Plugin.config.Value);
         }
 
         public void SetData(Channel chn)
         {
+            currentChannel = chn;
             name.text = $"[{chn.code}] {chn.name}";
             desc.text = chn.description;
             image.texture = chn.texture;
+
+            if (currentChannel.active == false)
+                stream.GetComponentInChildren<TextMeshProUGUI>().text = "Add To Stream";
+            else
+                stream.GetComponentInChildren<TextMeshProUGUI>().text = "Remove From Stream";
         }
 
         protected override void DidActivate(bool firstActivation, ActivationType type)

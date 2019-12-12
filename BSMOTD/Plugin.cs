@@ -26,7 +26,7 @@ namespace BSMOTD
 
         public void OnDisable()
         {
-
+            
         }
 
 
@@ -52,7 +52,7 @@ namespace BSMOTD
 
         public void OnApplicationQuit()
         {
-            
+            configProvider.Store(config.Value);
         }
 
         public void OnFixedUpdate()

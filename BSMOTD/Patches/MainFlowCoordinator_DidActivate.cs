@@ -16,16 +16,19 @@ namespace BSMOTD.Patches
     [HarmonyPatch(typeof(MainFlowCoordinator), "DidActivate")]
     public class MainFlowCoordinator_DidActivate
     {
+        public static bool ItsMyFirstTimeOniiChan = true;
         static void Postfix(bool firstActivation)
         {
             if (firstActivation)
             {
-                SharedCoroutineStarter.instance.StartCoroutine(Wait());
+                if (ItsMyFirstTimeOniiChan && Plugin.config.Value.Launch == LaunchType.Always)
+                    SharedCoroutineStarter.instance.StartCoroutine(Wait());
             }
         }
 
         static IEnumerator Wait()
         {
+            ItsMyFirstTimeOniiChan = false;
             yield return new WaitForSecondsRealtime(.025f);
             BSMOTDManager.instance.InvokeFlowCoordinator();
         }

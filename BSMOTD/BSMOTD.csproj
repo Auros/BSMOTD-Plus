@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BSMOTDManager.cs" />
+    <Compile Include="Post.cs" />
     <Compile Include="Channel.cs" />
     <Compile Include="Patches\MainFlowCoordinator_DidActivate.cs" />
     <Compile Include="Plugin.cs" />
@@ -111,6 +112,8 @@
     <Compile Include="UI\ChannelPostViewController.cs" />
     <Compile Include="UI\EmptyViewController.cs" />
     <Compile Include="UI\HotReloadableViewController.cs" />
+    <Compile Include="UI\PostDetailViewController.cs" />
+    <Compile Include="UI\SettingsViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
@@ -123,6 +126,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\channel-info.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\post-detail.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\settings.bsml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

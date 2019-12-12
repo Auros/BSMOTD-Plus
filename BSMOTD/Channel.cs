@@ -10,12 +10,9 @@ namespace BSMOTD
 {
     public class Channel : CustomCellInfo
     {
-        //public string title;
-        //public string content;
-        //public DateTime uploaded;
-        //public string poster;
         public string name;
         public string description;
+        public string source;
         public Texture2D texture;
         public Color theme;
         public string code;
@@ -27,37 +24,34 @@ namespace BSMOTD
 
         }
 
-        public Channel(string nx, string dx, string ix, float rx, float gx, float bx, string cx) : base("", "", null)
+        public Channel(string nx, string dx, string sx, string ix, float rx, float gx, float bx, string cx, bool def = false) : base("", "", null)
         {
-            /*title = tx;
-            content = cx;
-            uploaded = DateTime.Parse(ux);
-            poster = px;
-
-            text = title;
-            subtext = uploaded.ToShortDateString(); // + " at " + uploaded.ToShortTimeString() + " UTC";
-            */
-
             name = nx;
-            
             description = dx;
-
+            source = sx;
             theme = new Color(rx, gx, bx);
             code = cx;
-
             text = nx;
             subtext = dx;
 
-            //var e = Plugin.config.Value.ActiveChannels.ToList().Where(x => x.Equals(cx));
-            //active = e.Count() > 0;
-
-            SharedCoroutineStarter.instance.StartCoroutine(SiaUtil.Utilities.LoadScripts.LoadTextureCoroutine(ix, (tex) =>
+            if (Plugin.config.Value.ActiveChannels != null)
             {
-                
-                texture = tex;
-                icon = tex;
-                Logger.log.Info("Downloaded: " + ix);
-            }));
+                var e = Plugin.config.Value.ActiveChannels.Where(x => x.Equals(nx)).ToList();
+                active = e.Count() > 0;
+            }
+            else
+            {
+                active = def;
+            }
+
+            if (!string.IsNullOrEmpty(ix) && Plugin.config.Value.LoadPostImages)
+            {
+                SharedCoroutineStarter.instance.StartCoroutine(SiaUtil.Utilities.LoadScripts.LoadTextureCoroutine(ix, (tex) =>
+                {
+                    texture = tex;
+                    icon = tex;
+                }));
+            }
         }
     }
 }

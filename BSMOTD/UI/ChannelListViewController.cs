@@ -39,8 +39,15 @@ namespace BSMOTD.UI
                     p.icon = (p as Channel).texture;
                 }
                 customListTableData.tableView.ReloadData();
+
+                if (string.IsNullOrEmpty(Plugin.config.Value.SelectedChannel))
+                {
+                    int y = customListTableData.data.FindIndex(x => (x as Channel).name == Plugin.config.Value.SelectedChannel);
+                    if (y == -1) y = 0;
+                    customListTableData.tableView.ScrollToCellWithIdx(y, TableViewScroller.ScrollPositionType.Beginning, false);
+                    customListTableData.tableView.SelectCellWithIdx(y);
+                }
             }
         }
-
     }
 }

@@ -20,6 +20,33 @@ namespace BSMOTD
 
     public class BSMOTDManager : PersistentSingleton<BSMOTDManager>
     {
+        private void Awake()
+        {
+            ChannelAdded += CHN_ADD;
+            ChannelRemoved += CHN_DES;
+            ListModified += CHN_MOD;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            ChannelAdded -= CHN_ADD;
+            ChannelRemoved -= CHN_DES;
+            ListModified -= CHN_MOD;
+        }
+
+        private void CHN_ADD(Channel obj) { }
+        private void CHN_DES(Channel obj) { }
+        private void CHN_MOD()
+        {
+            //we stan loona in this household
+
+            ListDirty = true;
+        }
+
+        public bool ListDirty { get; internal set; }
+        
+
         internal VersionCodes currentCode = VersionCodes.Ambrosia;
         internal BSMOTDFlowCoordinator flowC;
 
@@ -42,6 +69,12 @@ namespace BSMOTD
         }
 
         internal List<Channel> channels = new List<Channel>();
+        internal List<Post> posts = new List<Post>();
+
+        internal Action<Channel> ChannelAdded;
+        internal Action<Channel> ChannelRemoved;
+        internal Action ListModified;
+
         internal IEnumerator LoadChannels()
         {
             channels = new List<Channel>();
@@ -56,10 +89,74 @@ namespace BSMOTD
                 foreach (JSONObject channel in channelNames)
                 {
                     if (Enum.TryParse(channel["ver"], out VersionCodes code) && code >= currentCode)
-                        channels.Add(new Channel(channel["name"], channel["description"], channel["image"], channel["color"]["r"].AsFloat, channel["color"]["g"].AsFloat, channel["color"]["b"].AsFloat, channel["code"]));
+                        channels.Add(new Channel(channel["name"], channel["description"], channel["source"], channel["image"], channel["color"]["r"].AsFloat, channel["color"]["g"].AsFloat, channel["color"]["b"].AsFloat, channel["code"], channel["default"]));
+                }
+                LoadAllActivePosts();
+            }
+        }
 
+        internal void LoadAllActivePosts()
+        {
+            foreach (var chn in channels)
+            {
+                if (chn.active)
+                    StartCoroutine(AddPosts(chn));
+            }
+        }
+
+        internal IEnumerator AddPosts(Channel chn)
+        {
+            List<Post> newPosts = new List<Post>();
+            UnityWebRequest getPosts = UnityWebRequest.Get(chn.source);
+            yield return getPosts.SendWebRequest();
+            
+            if (getPosts.isNetworkError || getPosts.isHttpError)
+                Logger.log.Error("Could not fetch " + chn.name + "'s posts.");
+            else
+            {
+                JSONArray postNames = JSON.Parse(getPosts.downloadHandler.text).AsArray;
+                if (chn.code == "MNC")
+                {
+                    foreach (JSONObject post in postNames)
+                    {
+                        newPosts.Add(new Post(
+                           post["post"]["title"],
+                           post["post"]["content"],
+                           post["post"]["uploaded"],
+                           post["user"] + "#" + post["disc"],
+                           post["post"]["image"],
+                           chn
+                        ));
+                    }
+                }
+                else
+                {
+                    foreach (JSONObject post in postNames)
+                    {
+                        newPosts.Add(new Post(
+                           post["title"],
+                           post["content"],
+                           post["uploaded"],
+                           post["author"],
+                           post["image"],
+                           chn
+                        ));
+                    }
+                }
+                if (newPosts.Count != 0)
+                {
+                    posts.AddRange(newPosts);
+                    ListModified.Invoke();
                 }
             }
+        }
+
+        internal void RemovePosts(Channel chn)
+        {
+            List<Post> isolated = posts.Where(x => x.channel == chn).ToList();
+            foreach (var iso in isolated)
+                posts.Remove(iso);
+            ListModified.Invoke();
         }
     }
 }
