@@ -1,29 +1,26 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.ViewControllers;
-using BSMOTD_Plus.Models;
+using IPA.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BSMOTD_Plus.ViewControllers
+namespace BSMOTD.UI
 {
-    public class PostDetailViewController : BSMLResourceViewController
+    public class PostDetailViewController : HotReloadableViewController
     {
-        public override string ResourceName => "BSMOTD_Plus.Views.postdetail.bsml";
+        public override string ResourceName => "BSMOTD.Views.post-detail.bsml";
 
-
-        [UIComponent("articlepicture")]
-        private RawImage image;
-
-        [UIComponent("articletitle")]
-        private TextMeshProUGUI titleText;
-
-        [UIComponent("description")]
-        TextPageScrollView scrollView;
+        public override string ResourceFilePath => BeatSaber.InstallPath + "\\BSMOTDHR\\post-detail.bsml";
 
         protected override void DidActivate(bool firstActivation, ActivationType type)
         {
             base.DidActivate(firstActivation, type);
+
             if (firstActivation)
             {
                 rectTransform.anchorMin = new Vector3(0.5f, 0, 0);
@@ -39,13 +36,20 @@ namespace BSMOTD_Plus.ViewControllers
             }
         }
 
-        public void SetDetails(AdvancedPost post)
+        [UIComponent("articlepicture")]
+        private RawImage image;
+
+        [UIComponent("articletitle")]
+        private TextMeshProUGUI titleText;
+
+        [UIComponent("description")]
+        TextPageScrollView scrollView;
+
+        public void SetDetails(Post post)
         {
-            titleText.text = post.Title;
-            image.texture = post.Texture;
-            scrollView.SetText(post.Description);
-            scrollView.SetText("Placeholder");
-            scrollView.SetText(post.Description);
+            titleText.text = post.title;
+            image.texture = post.texture;
+            scrollView.SetText(post.content);
         }
     }
 }

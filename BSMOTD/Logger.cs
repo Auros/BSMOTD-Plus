@@ -1,6 +1,6 @@
 ﻿using IPALogger = IPA.Logging.Logger;
 
-namespace BSMOTD_Plus
+namespace BSMOTD
 {
     internal static class Logger
     {

@@ -1,0 +1,10 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/nike4613/ModSaber-MetadataFileSchema/master/Schema.json",
+  "author": "Auros",
+  "description": "Get Message of the Days from various sources",
+  "gameVersion": "1.6.0b",
+  "id": "BSMOTD",
+  "name": "BSMOTD",
+  "version": "1.0.0",
+  "features": []
+}

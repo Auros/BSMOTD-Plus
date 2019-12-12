@@ -1,4 +1,4 @@
-﻿<bg child-control-height='false' child-control-width='false'>
+﻿﻿<bg child-control-height='false' child-control-width='false'>
   <vertical horizontal-fit='Unconstrained' spacing='1' child-control-height='false'>
     <horizontal pad='1'>
       <horizontal pad-right='4' horizontal-fit='PreferredSize'>
@@ -9,5 +9,5 @@
       </horizontal>
     </horizontal>
   </vertical>
-  <text-page anchor-min-x='0' anchor-min-y='0.2' anchor-max-x='1' anchor-max-y='1' anchor-pos-y='-15' id='description' pad='1'></text-page>
+  <text-page text='YOU SHOULDNT BE SEEING THIS' anchor-min-x='0' anchor-min-y='0.2' anchor-max-x='1' anchor-max-y='1' anchor-pos-y='-15' id='description' pad='1'></text-page>
 </bg>
