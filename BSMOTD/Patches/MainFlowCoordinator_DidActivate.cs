@@ -21,7 +21,7 @@ namespace BSMOTD.Patches
         {
             if (firstActivation)
             {
-                if (ItsMyFirstTimeOniiChan && Plugin.config.Value.Launch == LaunchType.Always)
+                if (ItsMyFirstTimeOniiChan && Plugin.config.Value.Launch == LaunchType.Always && BSMOTDManager.instance.downloaded)
                     SharedCoroutineStarter.instance.StartCoroutine(Wait());
             }
         }

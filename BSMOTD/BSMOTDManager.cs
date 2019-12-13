@@ -75,6 +75,8 @@ namespace BSMOTD
         internal Action<Channel> ChannelRemoved;
         internal Action ListModified;
 
+        internal bool downloaded = false;
+
         internal IEnumerator LoadChannels()
         {
             channels = new List<Channel>();
@@ -91,6 +93,7 @@ namespace BSMOTD
                     if (Enum.TryParse(channel["ver"], out VersionCodes code) && code >= currentCode)
                         channels.Add(new Channel(channel["name"], channel["description"], channel["source"], channel["image"], channel["color"]["r"].AsFloat, channel["color"]["g"].AsFloat, channel["color"]["b"].AsFloat, channel["code"], channel["default"]));
                 }
+                downloaded = true;
                 LoadAllActivePosts();
             }
         }
